@@ -1,0 +1,29 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+	<head> 
+	    <meta charset="UTF-8"> 
+	    <title>Blogs Home</title>
+	     {% load static %}  
+	        <link rel="stylesheet" href="{% static 'blogs_app/css/style.css' %}" media="screen" title="no title"  charset="utf-8">
+	</head> 
+	<body> 
+	     <div id="wrapper"> 
+	         <h1>Blogs Home</h1> 
+	         <div id="content_layer"> 
+				<form action="/create" method="post">
+	                {% csrf_token %} 
+		            <label for="name"><span>Blog Name:</span> 
+						<input type="text" name="name" id="name" placeholder="blog name"></label>
+                
+		            <label for="desc"><span>Description:</span>
+
+						<textarea name="desc" id="desc" placeholder="description"></textarea></label>
+                
+	                <span>
+	                    <input type='submit' value='Submit'>
+	                </span>
+	            </form>
+	        </div>
+	     </div> 
+	</body> 
+</html> 
