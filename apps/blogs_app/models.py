@@ -3,6 +3,15 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+class BlogManager(models.Manager):
+    def basic_validator(self, postData):
+        errors = {}
+        if len(postData['name']) < 5:
+            errors["name"] = "Blog name should be more than 5 characters"
+        if len(postData['desc']) < 10:
+            errors["desc"] = "Blog desc should be more than 10 characters"
+        return errors
+
 # Create your models here.
 class Blog(models.Model):
     name = models.CharField(max_length=255)
@@ -10,11 +19,12 @@ class Blog(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     
-    # def __str__(self):
-    #     return "\n\tBlog Name: {}\n\tBlog Description: {}\n".format(str(self.name), str(self.desc))
+    objects = BlogManager()
 
-    def __repr__(self): 
-        return "<Blog object: {} {}>".format(self.name, self.desc)
+    def __str__(self):
+        return "\n\tBlog Name: {}\n\tBlog Description: {}\n".format(str(self.name), str(self.desc))
+
+    __repr__ = __str__
 
 class Comment(models.Model):
     comment = models.CharField(max_length=255)
@@ -23,6 +33,7 @@ class Comment(models.Model):
     # Notice the association made with ForeignKey for a one-to-many relationship
     # There can be many comments to one blog
     blog = models.ForeignKey(Blog, related_name = "comments")
+
 class Admin(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)

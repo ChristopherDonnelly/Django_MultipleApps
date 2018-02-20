@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render, HttpResponse, redirect
+from django.contrib import messages
+from .models import Blog
 
 # the index function is called when root is visited
 def index(request):
@@ -35,6 +37,20 @@ def create(request):
     else:
         return redirect("/")
 
+def update(request):
+    errors = Blog.objects.basic_validator(request.POST)
+
+    if len(errors):
+        for tag, error in errors.iteritems():
+            messages.error(request, error, extra_tags=tag)
+        return redirect('/blog/edit/'+id)
+    else:
+        blog = Blog.objects.get(id = id)
+        blog.name = request.POST['name']
+        blog.desc = request.POST['desc']
+        blog.save()
+        return redirect('/blogs')
+        
 # the show function is called in order to display a specific blog when a number [0-9] is passed
 def show(request, blog_num):
     response = "Show Blog number {}".format(blog_num)
